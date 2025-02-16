@@ -49,6 +49,9 @@ class _ZdeepgramTestPage extends State<ZdeepgramTestPage> {
     normalFontStyle = TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w400);
     _hasPermission = await mic.hasPermission();
     log('_hasPermission:$_hasPermission');
+    if (!_hasPermission){
+      requestAudioPermissions();
+    }
     setState(() {});
   }
 
@@ -90,11 +93,17 @@ class _ZdeepgramTestPage extends State<ZdeepgramTestPage> {
                 ),
               ),
             ),
+            const SizedBox(height: 10,),
             Flexible(
               flex: 1,
-              child: Text(_isListening ? 'Listening...' : 'Press button and speak now', style: normalFontStyle),
+              child: Text(_hasPermission ? (_isListening ? 'Listening...' : 'Press button and speak now')
+                  :'Please enable MIC permission.', style: normalFontStyle),
             ),
-
+            if (!_hasPermission)
+              Flexible(
+                flex: 1,
+                child: TextButton(onPressed: _openSettings, child: Text('Open settings')),
+              ),
             Flexible(
               flex: 2,
               child: Container(
@@ -122,6 +131,7 @@ class _ZdeepgramTestPage extends State<ZdeepgramTestPage> {
                   trackVisibility: true,
                   child: TextField(
                     controller: _textEditingController,
+                    scrollController: _scrollController,
                     decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.greenAccent, width: 5.0)),
                       enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey, width: 1.0)),
@@ -161,7 +171,6 @@ class _ZdeepgramTestPage extends State<ZdeepgramTestPage> {
     };
 
     final stream = deepgram.listen.live(audioStream, queryParams: liveParams);
-
     stream.listen((res) {
       debugPrint(res.transcript);
       _textEditingController.text += '${res.transcript}\n' ?? '';
@@ -175,7 +184,6 @@ class _ZdeepgramTestPage extends State<ZdeepgramTestPage> {
 
   void _onPlayerStart() async {
     startStream();
-
     setState(() {
       _isListening = true;
     });
@@ -188,12 +196,16 @@ class _ZdeepgramTestPage extends State<ZdeepgramTestPage> {
     });
   }
 
-  Future<void> openSettings() async {
+  Future<void> _openSettings() async {
     if (await Permission.microphone.isPermanentlyDenied) {
       log('Microphone permission permanently denied.');
       await openAppSettings();
     } else {
       log('Microphone permission denied.');
+      var status = await Permission.microphone.status;
+      if (!status.isGranted) {
+        openAppSettings();
+      }
     }
   }
 
@@ -214,7 +226,7 @@ class _ZdeepgramTestPage extends State<ZdeepgramTestPage> {
       }
     } else {
       log('Microphone permission denied.');
-      openSettings();
+      status = await Permission.microphone.request();
     }
   }
 }
