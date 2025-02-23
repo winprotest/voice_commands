@@ -37,7 +37,7 @@ dependencies:
 
   lottie: ^3.3.1
   permission_handler: ^11.3.1
-  speech_to_text: ^7.0.0
+  #speech_to_text: ^7.0.0
 
   #deepgram
   deepgram_speech_to_text: ^3.0.3

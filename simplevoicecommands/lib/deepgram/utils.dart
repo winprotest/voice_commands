@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:universal_file/universal_file.dart';
@@ -55,4 +56,9 @@ StreamController<String> getTextStreamController({int duration = 6}) {
   });
 
   return controller;
+}
+
+void showSnackbar(BuildContext context, String text, {bool isError = false}){
+  var snackBar = SnackBar(content: Text(text), backgroundColor: isError? Colors.red: Theme.of(context).primaryColor,);
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }

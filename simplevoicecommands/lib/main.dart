@@ -1,8 +1,8 @@
 import 'package:deepgram_speech_to_text/deepgram_speech_to_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:simplevoicecommands/deepgram/zdeepgram_test.dart';
-import 'package:simplevoicecommands/stt_test.dart';
+import 'package:simplevoicecommands/deepgram/tts_stt_main.dart';
+import 'package:simplevoicecommands/deepgram/stt_test.dart';
 
 final deepgramAPIKey = dotenv.get("DEEPGRAM_API_KEY");
 Deepgram deepgram = Deepgram(deepgramAPIKey, baseQueryParams: baseParams);
@@ -31,7 +31,7 @@ class ExampleApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: _title,
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
-      home: ZdeepgramTestPage(title: _title),
+      home: TTSSSTMainPage(),
     );
   }
 }
