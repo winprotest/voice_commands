@@ -10,7 +10,7 @@ class TTSSSTMainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Voice Agent Test')),
+        appBar: AppBar(title: Text('Simple Voice Commands Test')),
       body:Center(
         child:SizedBox(
           height: MediaQuery.of(context).size.height * 0.2,
